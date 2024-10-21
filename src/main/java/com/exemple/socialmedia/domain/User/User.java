@@ -1,7 +1,6 @@
 package com.exemple.socialmedia.domain.User;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -24,41 +23,38 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Entity()
+@Entity
 @Table(name = "users")
-@Getter()
-@Setter()
-@NoArgsConstructor()
-@AllArgsConstructor()
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
-  @Id()
+  @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
   @NotBlank(message = "Name cannot be blank")
-  @Min(value = 4, message = "Name must be at least 4 characters long")
-  @Max(value = 255, message = "Name must be at most 255 characters long")
+  @Size(min = 4, max = 255, message = "Name must be between 4 and 255 characters long")
   private String name;
 
   @NotBlank(message = "Email cannot be blank")
   @Email(message = "Invalid email address")
-  @Max(value = 255, message = "Email must be at most 255 characters long")
+  @Size(max = 255, message = "Email must be at most 255 characters long")
   private String email;
 
   @NotBlank(message = "Password cannot be blank")
-  @Min(value = 8, message = "Password must be at least 8 characters long")
-  @Max(value = 16, message = "Password must be at most 16 characters long")
+  @Size(min = 8, max = 16, message = "Password must be between 8 and 16 characters long")
   private String password;
 
-  @Nullable()
-  @URL()
+  @Nullable
+  @URL
   private String imgUrl;
 
   @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
@@ -66,15 +62,6 @@ public class User implements UserDetails {
 
   @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
   private LocalDateTime updatedAt;
-
-  @OneToMany(mappedBy = "user")
-  private List<Post> pots;
-
-  @OneToMany(mappedBy = "user")
-  private List<UserLikes> likes;
-
-  @OneToMany(mappedBy = "user")
-  private List<Comment> comments;
 
   public User(UserDTO payload) {
     this.name = payload.name();
@@ -84,7 +71,7 @@ public class User implements UserDetails {
   }
 
   public UserResponseDTO toSafeResponse() {
-    return new UserResponseDTO(this.name, this.email, this.imgUrl, this.createdAt, this.updatedAt);
+    return new UserResponseDTO(this.id, this.name, this.email, this.imgUrl, this.createdAt, this.updatedAt);
   }
 
   @Override

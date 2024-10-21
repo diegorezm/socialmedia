@@ -3,6 +3,7 @@ package com.exemple.socialmedia.domain.Post;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.exemple.socialmedia.domain.User.User;
@@ -16,10 +17,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,8 +34,7 @@ public class Post {
   private Integer id;
 
   @NotBlank(message = "Content cannot be blank")
-  @Min(value = 4, message = "Content must be at least 4 characters long")
-  @Max(value = 1150, message = "Content must be at most 1150 characters long")
+  @Size(min = 4, max = 1150, message = "Your content length should be between 4 and 1150")
   private String content;
 
   @Nullable()

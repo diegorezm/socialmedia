@@ -1,6 +1,8 @@
 package com.exemple.socialmedia.domain.Post;
 
 import java.time.LocalDateTime;
+
+import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.exemple.socialmedia.domain.User.User;
 import jakarta.persistence.Entity;
@@ -25,26 +27,31 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comment {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-  @NotBlank(message = "Content cannot be blank")
-  @Min(value = 4, message = "Content must be at least 4 characters long")
-  @Max(value = 1150, message = "Content must be at most 1150 characters long")
-  private String content;
+    @NotBlank(message = "Comment cannot be blank")
+    @Size(min = 2, max = 500, message = "Your comment length should be between 4 and 500")
+    private String content;
 
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-  @ManyToOne
-  @JoinColumn(name = "post_id")
-  private Post post;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 
-  @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-  private LocalDateTime createdAt;
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime createdAt;
 
-  @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-  private LocalDateTime updatedAt;
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime updatedAt;
+
+    public Comment(User user, Post post, String content) {
+        this.user = user;
+        this.post = post;
+        this.content = content;
+    }
 }

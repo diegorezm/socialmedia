@@ -21,15 +21,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserLikes {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-  @OneToOne
-  @JoinColumn(name = "post_id")
-  private Post post;
+    @OneToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    public UserLikes(User user, Post post) {
+        this.user = user;
+        this.post = post;
+    }
 }

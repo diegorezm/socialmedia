@@ -1,12 +1,14 @@
 package com.exemple.socialmedia.domain.User;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record UserResponseDTO(
-  String name,
-  String email,
-  String imgUrl,
-  LocalDateTime createdAt,
-  LocalDateTime updatedAt
+        UUID id,
+        String name,
+        String email,
+        String imgUrl,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
 }
