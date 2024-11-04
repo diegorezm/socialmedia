@@ -1,0 +1,53 @@
+<form [formGroup]="authForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6 w-full">
+
+  <!-- Name Field (Only shown in Register mode) -->
+  <div *ngIf="authForm.get('name')" class="space-y-2">
+    <label class="input input-bordered flex items-center gap-2">
+      <input type="text" class="grow" placeholder="Name" formControlName="name">
+      <lucide-angular [img]="UserIcon" class="size-5"></lucide-angular>
+    </label>
+    <p *ngIf="authForm.get('name')?.errors?.['required']" class="text-error">
+      Name is required.
+    </p>
+    <p *ngIf="authForm.get('name')?.errors?.['minlength']" class="text-error">
+      Name must be at least 3 characters.
+    </p>
+  </div>
+
+  <!-- Email Field -->
+  <div class="space-y-2">
+    <label class="input input-bordered flex items-center gap-2">
+      <input type="text" class="grow" placeholder="Email" formControlName="email">
+      <lucide-angular [img]="MailIcon" class="size-5"></lucide-angular>
+    </label>
+    <p *ngIf="authForm.get('email')?.errors?.['required']" class="text-error">
+      Email is required.
+    </p>
+    <p *ngIf="authForm.get('email')?.errors?.['email']" class="text-error">
+      Please enter a valid email address.
+    </p>
+  </div>
+
+  <!-- Password Field -->
+  <div class="space-y-2">
+    <label class="input input-bordered flex items-center gap-2">
+      <input type="password" class="grow" placeholder="Password" formControlName="password">
+      <lucide-angular [img]="LockIcon" class="size-5"></lucide-angular>
+    </label>
+    <p *ngIf="authForm.get('password')?.errors?.['required']" class="text-error">
+      Password is required.
+    </p>
+    <p *ngIf="authForm.get('password')?.errors?.['minlength']" class="text-error">
+      Password must be at least 6 characters.
+    </p>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="w-1/2">
+    <button type="submit" class="btn btn-md btn-primary" [disabled]="loading || authForm.invalid">
+      <span *ngIf="loading" class="loading loading-spinner loading-md"></span>
+      <span *ngIf="!loading">{{ mode === 'register' ? 'Register' : 'Login' }}</span>
+    </button>
+  </div>
+
+</form>

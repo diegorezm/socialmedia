@@ -1,13 +1,11 @@
 package com.exemple.socialmedia.domain.User;
 
-import com.exemple.socialmedia.domain.Post.Post;
+import java.util.UUID;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,16 +23,6 @@ public class UserLikes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
-
-    public UserLikes(User user, Post post) {
-        this.user = user;
-        this.post = post;
-    }
+    private UUID userId;
+    private Integer postId;
 }

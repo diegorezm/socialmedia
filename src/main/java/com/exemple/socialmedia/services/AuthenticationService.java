@@ -1,19 +1,13 @@
- package com.exemple.socialmedia.services;
+package com.exemple.socialmedia.services;
 
-import com.exemple.socialmedia.domain.Auth.LoginDTO;
-import com.exemple.socialmedia.domain.Auth.LoginResponseDTO;
-import com.exemple.socialmedia.domain.Auth.TokenResponseDTO;
 import com.exemple.socialmedia.domain.Exception.HttpException;
 import com.exemple.socialmedia.domain.User.User;
 import com.exemple.socialmedia.domain.User.UserDTO;
 import com.exemple.socialmedia.domain.User.UserResponseDTO;
 import com.exemple.socialmedia.repositories.UserRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,15 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthenticationService implements UserDetailsService {
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private TokenService tokenService;
+    private final UserRepository userRepository;
 
     public UserResponseDTO register(UserDTO payload) {
         if (this.userRepository.existsByEmail(payload.email())) {
@@ -40,18 +28,10 @@ public class AuthenticationService implements UserDetailsService {
         String password = new BCryptPasswordEncoder().encode(payload.password());
         User user = new User(payload);
         user.setPassword(password);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
         var newUser = this.userRepository.save(user);
         return newUser.toSafeResponse();
-    }
-
-    public LoginResponseDTO login(LoginDTO payload) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(payload.email(),
-                payload.password());
-        var auth = this.authenticationManager.authenticate(authenticationToken);
-        User user = (User) auth.getPrincipal();
-        var token = this.tokenService.genToken(user);
-        var tokenResponse = new TokenResponseDTO(token.token(), token.expiresAt());
-        return new LoginResponseDTO(tokenResponse, user.toSafeResponse());
     }
 
     public UserResponseDTO getUserFromHeader() {
@@ -66,6 +46,6 @@ public class AuthenticationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.userRepository.findUserByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with this email " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with this email " + username + " ."));
     }
 }

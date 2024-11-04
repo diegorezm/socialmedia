@@ -1,0 +1,7 @@
+<div class="card bg-base-200 mx-auto mt-6 shadow-md w-full max-w-4xl">
+  <div class="card-body">
+    <h2 class="card-title">Register</h2>
+    <app-auth-form [submitFn]="submitFn.bind(this)" [mode]="'register'" [loading]="loading"></app-auth-form>
+    <p>Already have an account? <a href="/auth/login" class="link link-primary">Login</a></p>
+  </div>
+</div>

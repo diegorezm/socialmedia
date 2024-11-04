@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service()
@@ -34,40 +35,46 @@ public class UserService {
 
     public User getById(UUID id) {
         return this.userRepository.findById(id)
-                .orElseThrow(() -> new HttpException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new HttpException("User not found.", HttpStatus.NOT_FOUND));
+    }
+
+    public User getByEmail(String email) {
+        return this.userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new HttpException("User not found.", HttpStatus.NOT_FOUND));
     }
 
     public void update(UUID id, UserDTO payload) {
         var user = this.getById(id);
         user.setName(payload.name());
         user.setEmail(payload.email());
+        user.setUpdatedAt(LocalDateTime.now());
         this.userRepository.save(user);
     }
 
     public void delete(UUID id) {
         if (!this.userRepository.existsById(id)) {
-            throw new HttpException(HttpStatus.NOT_FOUND);
+            throw new HttpException("User not found.", HttpStatus.NOT_FOUND);
         }
         this.userRepository.deleteById(id);
     }
 
     public Page<UserLikes> getUserLikes(UUID id, Pageable pageable) {
         if (!this.userRepository.existsById(id)) {
-            throw new HttpException(HttpStatus.NOT_FOUND);
+            throw new HttpException("User not found.", HttpStatus.NOT_FOUND);
         }
         return this.userLIkesRepository.findByUserId(id, pageable);
     }
 
     public Page<Comment> getUserComments(UUID id, Pageable pageable) {
         if (!this.userRepository.existsById(id)) {
-            throw new HttpException(HttpStatus.NOT_FOUND);
+            throw new HttpException("User not found.", HttpStatus.NOT_FOUND);
         }
         return this.commentRepository.findByUserId(id, pageable);
     }
 
     public Page<Post> getUserPosts(UUID id, Pageable pageable) {
         if (!this.userRepository.existsById(id)) {
-            throw new HttpException(HttpStatus.NOT_FOUND);
+            throw new HttpException("User not found.", HttpStatus.NOT_FOUND);
         }
         return this.postsRepository.findByUserId(id, pageable);
     }

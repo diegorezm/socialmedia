@@ -5,18 +5,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import com.exemple.socialmedia.domain.Post.Comment;
 import jakarta.annotation.Nullable;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import com.exemple.socialmedia.domain.Post.Post;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,10 +20,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
@@ -49,8 +48,8 @@ public class User implements UserDetails {
   @Size(max = 255, message = "Email must be at most 255 characters long")
   private String email;
 
-  @NotBlank(message = "Password cannot be blank")
-  @Size(min = 8, max = 16, message = "Password must be between 8 and 16 characters long")
+  @NotNull
+  @JsonIgnore
   private String password;
 
   @Nullable
@@ -81,7 +80,7 @@ public class User implements UserDetails {
 
   @Override
   public String getUsername() {
-    return this.name;
+    return this.email;
   }
 
   @Override
@@ -102,5 +101,10 @@ public class User implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+
+  @Override
+  public String getPassword() {
+    return this.password;
   }
 }
