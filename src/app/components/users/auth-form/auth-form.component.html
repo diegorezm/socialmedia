@@ -1,5 +1,4 @@
 <form [formGroup]="authForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6 w-full">
-
   <!-- Name Field (Only shown in Register mode) -->
   <div *ngIf="authForm.get('name')" class="space-y-2">
     <label class="input input-bordered flex items-center gap-2">

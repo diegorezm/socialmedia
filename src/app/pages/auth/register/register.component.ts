@@ -3,6 +3,7 @@ import { AuthFormComponent } from "../../../components/users/auth-form/auth-form
 import { UserDTO } from "../../../dtos/user.dto";
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,7 @@ export class RegisterComponent implements OnInit {
 
   loading = false;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private notificationService: NotificationService, private authService: AuthService, private router: Router) {
   }
 
   submitFn(user: UserDTO) {
@@ -27,8 +28,13 @@ export class RegisterComponent implements OnInit {
         this.loading = false;
       },
       next: () => {
+        this.notificationService.success('User created successfully!');
         this.router.navigate(['/auth/login']);
       },
+      error: (error) => {
+        this.loading = false;
+        this.notificationService.error(error.message ?? "An unknown error occurred.");
+      }
     });
   }
   ngOnInit(): void {
