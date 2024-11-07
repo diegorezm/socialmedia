@@ -1,26 +1,26 @@
-import { Injectable } from '@angular/core';
-import { Notification, NotificationType } from '../models/notification.model';
-import { Subject } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Notification, NotificationType} from '../models/notification.model';
+import {Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
 
-  constructor() { }
+  constructor() {}
 
   private notification$: Subject<Notification> = new Subject();
 
   success(message: string) {
-    this.notify({ message, type: NotificationType.SUCCESS, duration: 3000 });
+    this.notify({message, type: NotificationType.SUCCESS, duration: 3000});
   }
 
   error(message: string) {
-    this.notify({ message, type: NotificationType.ERROR, duration: 3000 });
+    this.notify({message, type: NotificationType.ERROR, duration: 3000});
   }
 
   warning(message: string) {
-    this.notify({ message, type: NotificationType.WARNING, duration: 3000 });
+    this.notify({message, type: NotificationType.WARNING, duration: 3000});
   }
 
   getNotification$() {
